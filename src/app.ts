@@ -28,6 +28,8 @@ app.get<{}, MessageResponse>('/', (req, res) => {
 
 // Importing routes
 import userRouter from './routes/user.route';
+import studentRouter from './routes/student.route';
+app.use('/api/students', studentRouter);
 app.use('/api/users', userRouter);
 
 // Global Middlewares
