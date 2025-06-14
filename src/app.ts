@@ -29,8 +29,10 @@ app.get<{}, MessageResponse>('/', (req, res) => {
 // Importing routes
 import userRouter from './routes/user.route';
 import studentRouter from './routes/student.route';
+import authRouter from './routes/auth.route';
 app.use('/api/students', studentRouter);
 app.use('/api/users', userRouter);
+app.use('/api/', authRouter);
 
 // Global Middlewares
 app.use(notFound);
