@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 import { validateBody } from './middlewares/global/validate.body';
@@ -15,6 +16,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
+app.use(cookieParser());
 
 // Our custom body validation middleware
 app.use(express.json(), validateBody);
@@ -30,9 +32,12 @@ app.get<{}, MessageResponse>('/', (req, res) => {
 import userRouter from './routes/user.route';
 import studentRouter from './routes/student.route';
 import authRouter from './routes/auth.route';
+import { authMiddleware } from './middlewares/auth.middleware';
+app.use('/api/', authRouter);
+app.use(authMiddleware);
 app.use('/api/students', studentRouter);
 app.use('/api/users', userRouter);
-app.use('/api/', authRouter);
+
 
 // Global Middlewares
 app.use(notFound);
