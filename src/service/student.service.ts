@@ -10,3 +10,24 @@ export const getStudentById = async(id: number): Promise<Student | null> => {
     const student = await sql<Student[]>`SELECT * FROM students WHERE id = ${id}`;
     return student[0] || null;
 }
+
+export const editStudent = async (id: number, studentData: Partial<Student>): Promise<Student | null> => {
+  if (Object.keys(studentData).length === 0) return null;
+
+  const updates = Object.entries(studentData).map(
+    ([key, value]) => sql`${sql.unsafe(key)} = ${value}`
+  );
+
+  const setClause = updates.reduce((prev, curr, index) => {
+    return index === 0 ? curr : sql`${prev}, ${curr}`;
+  });
+
+  await sql`
+    UPDATE students
+    SET ${setClause}
+    WHERE id = ${id}
+  `;
+
+  return await getStudentById(id);
+};
+
