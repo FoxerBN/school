@@ -27,7 +27,10 @@ export const editStudent = async (id: number, studentData: Partial<Student>): Pr
     SET ${setClause}
     WHERE id = ${id}
   `;
-
   return await getStudentById(id);
 };
 
+export const deleteStudent = async(id: number): Promise<boolean> => {
+  const result = await sql`DELETE FROM students WHERE id = ${id}`;
+  return result.count > 0;
+}

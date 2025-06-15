@@ -2,6 +2,30 @@ import { Request, Response, NextFunction } from "express";
 import * as loginService from "../service/login.service";
 import { ApiError } from "../middlewares/global/api.error";
 
+/**
+ * Logs in a user by verifying email and password, then sets a JWT token in cookies.
+ *
+ * @param {Request} req - Express request object. Expects `email` and `password` in `req.body`.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+//  * // Request body:
+//  * // {
+//  * //   "email": "user@example.com",
+//  * //   "password": "userpassword"
+//  * // }
+//  *
+//  * // Success response:
+//  * // {
+//  * //   "message": "Login successful",
+//  * //   "user": {
+//  * //     "email": "user@example.com",
+//  * //     "role_id": 1
+//  * //   }
+//  * // }
+//  */
 export const loginUser = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
     const { email, password } = req.body;
     
@@ -32,4 +56,3 @@ export const loginUser = async(req: Request, res: Response, next: NextFunction):
         next(error);
     }
 }
-//TODO check cookie settings 
