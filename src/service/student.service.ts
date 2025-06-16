@@ -34,3 +34,15 @@ export const deleteStudent = async(id: number): Promise<boolean> => {
   const result = await sql`DELETE FROM students WHERE id = ${id}`;
   return result.count > 0;
 }
+
+
+export const insertStudent = async (
+  studentData: Omit<Student, 'id' | 'created_at' | 'updated_at'>
+): Promise<Student> => {
+  const result = await sql<Student[]>`
+    INSERT INTO students (first_name, last_name, grade, birth_date, created_by)
+    VALUES (${studentData.first_name}, ${studentData.last_name}, ${studentData.grade}, ${studentData.birth_date}, ${studentData.created_by})
+    RETURNING *
+  `;
+  return result[0];
+}

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import * as studentService from "../service/student.service";
 import { ApiError } from "../middlewares/global/api.error";
-import { validateStudent } from "../utils/validation.student"
+import { updateStudent, insertStudentValidate } from "../utils/validation.student"
+import { AuthRequest } from "../middlewares/auth.middleware";
 const allowedFields = ["first_name", "last_name", "grade", "birth_date"];
 
 
@@ -37,7 +38,7 @@ export const editStudent = async (req: Request, res: Response, next: NextFunctio
       return next(ApiError.badRequest("Invalid student ID"));
     }
     
-    const parseResult = validateStudent.safeParse(req.body);
+    const parseResult = updateStudent.safeParse(req.body);
     if (!parseResult.success) {
       return next(ApiError.badRequest("Invalid student data"));
     }
@@ -73,6 +74,25 @@ export const deleteStudent = async (req: Request, res: Response, next: NextFunct
       throw ApiError.notFound("Student not found");
     }
     res.status(200).json({ message: "Student deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const insertStudent = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+  const parseResult = insertStudentValidate.safeParse(req.body);
+  if (!parseResult.success) return next(ApiError.badRequest("Invalid student data"));
+  const userId = req.user?.id;
+  if (!userId) return next(ApiError.badRequest("User not authenticated"));
+
+  const studentData = {
+    ...parseResult.data,
+    created_by: userId,
+  };
+
+  try {
+    const newStudent = await studentService.insertStudent(studentData);
+    res.status(201).json(newStudent);
   } catch (error) {
     next(error);
   }
