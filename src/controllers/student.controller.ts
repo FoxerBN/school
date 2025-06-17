@@ -5,8 +5,41 @@ import { updateStudent, insertStudentValidate } from "../utils/validation.studen
 import { AuthRequest } from "../middlewares/auth.middleware";
 const allowedFields = ["first_name", "last_name", "grade", "birth_date"];
 
-
-
+/**
+ * Retrieves all students from the database.
+ *
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Success response:
+ * // {
+ * //   "data": [
+ * //     {
+ * //       "id": 1,
+ * //       "first_name": "John",
+ * //       "last_name": "Doe",
+ * //       "grade": "7A",
+ * //       "birth_date": "2008-05-15T00:00:00.000Z",
+ * //       "created_by": 1,
+ * //       "created_at": "2024-01-01T00:00:00.000Z",
+ * //       "updated_at": "2024-01-01T00:00:00.000Z"
+ * //     },
+ * //     {
+ * //       "id": 2,
+ * //       "first_name": "Jane",
+ * //       "last_name": "Smith",
+ * //       "grade": "9B",
+ * //       "birth_date": "2007-08-22T00:00:00.000Z",
+ * //       "created_by": 2,
+ * //       "created_at": "2024-01-02T00:00:00.000Z",
+ * //       "updated_at": "2024-01-02T00:00:00.000Z"
+ * //     }
+ * //   ]
+ * // }
+ */
 export const getAllStudents = async (req: Request, res:Response, next: NextFunction): Promise<void> => {
     try {
         const result = await studentService.getAllStudents();
@@ -17,6 +50,29 @@ export const getAllStudents = async (req: Request, res:Response, next: NextFunct
     }
 }
 
+/**
+ * Retrieves a specific student by their ID.
+ *
+ * @param {Request} req - Express request object. Expects `id` as a URL parameter.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Request URL: /students/1
+ * //
+ * // Success response:
+ * // {
+ * //   "id": 1,
+ * //   "first_name": "John",
+ * //   "last_name": "Doe",
+ * //   "grade": "3A",
+ * //   "birth_date": "2008-05-15T00:00:00.000Z",
+ * //   "created_by": 1,
+ * //   "created_at": "2024-01-01T00:00:00.000Z",
+ * //   "updated_at": "2024-01-01T00:00:00.000Z"
+ * // }
+ */
 export const getStudentById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const studentId = parseInt(req.params.id);
     if (isNaN(studentId)) {
@@ -31,6 +87,36 @@ export const getStudentById = async (req: Request, res: Response, next: NextFunc
     }
 }
 
+/**
+ * Updates an existing student with validated input data.
+ *
+ * @param {Request} req - Express request object. Expects `id` as URL parameter and student data in `req.body`.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Request URL: PUT /students/1
+ * // Request body:
+ * // {
+ * //   "first_name": "John",
+ * //   "last_name": "Smith",
+ * //   "grade": "4C",
+ * //   "birth_date": "2008-05-15"
+ * // }
+ * //
+ * // Success response:
+ * // {
+ * //   "id": 1,
+ * //   "first_name": "John",
+ * //   "last_name": "Smith",
+ * //   "grade": "8C",
+ * //   "birth_date": "2008-05-15T00:00:00.000Z",
+ * //   "created_by": 1,
+ * //   "created_at": "2024-01-01T00:00:00.000Z",
+ * //   "updated_at": "2024-01-01T12:00:00.000Z"
+ * // }
+ */
 export const editStudent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const studentId = parseInt(req.params.id);
@@ -63,6 +149,22 @@ export const editStudent = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+/**
+ * Deletes a student by their ID.
+ *
+ * @param {Request} req - Express request object. Expects `id` as a URL parameter.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Request URL: DELETE /students/1
+ * //
+ * // Success response:
+ * // {
+ * //   "message": "Student deleted successfully"
+ * // }
+ */
 export const deleteStudent = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const studentId = parseInt(req.params.id);
   if (isNaN(studentId)) {
@@ -79,6 +181,35 @@ export const deleteStudent = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+/**
+ * Creates a new student with validated input data and authenticated user.
+ *
+ * @param {AuthRequest} req - Express request object with user authentication. Expects student data in `req.body`.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Request body:
+ * // {
+ * //   "first_name": "Alice",
+ * //   "last_name": "Johnson",
+ * //   "grade": "4C",
+ * //   "birth_date": "2009-03-10"
+ * // }
+ * //
+ * // Success response:
+ * // {
+ * //   "id": 3,
+ * //   "first_name": "Alice",
+ * //   "last_name": "Johnson",
+ * //   "grade": "4C",
+ * //   "birth_date": "2009-03-10T00:00:00.000Z",
+ * //   "created_by": 1,
+ * //   "created_at": "2024-01-01T00:00:00.000Z",
+ * //   "updated_at": "2024-01-01T00:00:00.000Z"
+ * // }
+ */
 export const insertStudent = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   const parseResult = insertStudentValidate.safeParse(req.body);
   if (!parseResult.success) return next(ApiError.badRequest("Invalid student data"));

@@ -4,6 +4,41 @@ import { ApiError } from "../middlewares/global/api.error";
 import { insertUserSchema } from "../utils/validation.user";
 import bcrypt from "bcryptjs";
 
+/**
+ * Retrieves all users from the database.
+ *
+ * @param {Request} req - Express request object.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Success response:
+ * // {
+ * //   "data": [
+ * //     {
+ * //       "id": 1,
+ * //       "email": "user1@example.com",
+ * //       "password": "$2a$10$hashedpassword1",
+ * //       "first_name": "John",
+ * //       "last_name": "Doe",
+ * //       "role_id": 1,
+ * //       "created_at": "2024-01-01T00:00:00.000Z",
+ * //       "updated_at": "2024-01-01T00:00:00.000Z"
+ * //     },
+ * //     {
+ * //       "id": 2,
+ * //       "email": "user2@example.com",
+ * //       "password": "$2a$10$hashedpassword2",
+ * //       "first_name": "Jane",
+ * //       "last_name": "Smith",
+ * //       "role_id": 2,
+ * //       "created_at": "2024-01-02T00:00:00.000Z",
+ * //       "updated_at": "2024-01-02T00:00:00.000Z"
+ * //     }
+ * //   ]
+ * // }
+ */
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const users = await userService.getAllUsers();
@@ -14,6 +49,25 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
+/**
+ * Retrieves a specific user by their ID.
+ *
+ * @param {Request} req - Express request object. Expects `id` as a URL parameter.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Request URL: /users/1
+ * //
+ * // Success response:
+ * // {
+ * //   "id": 1,
+ * //   "email": "user@example.com",
+ * //   "role_id": 1,
+ * //   "created_at": "2024-01-01T00:00:00.000Z"
+ * // }
+ */
 export const getUserById = async (req: Request, res: Response, next: NextFunction)=> {
     const userId = parseInt(req.params.id);
     if (isNaN(userId)) {
@@ -28,6 +82,22 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
+/**
+ * Deletes a user by their ID.
+ *
+ * @param {Request} req - Express request object. Expects `id` as a URL parameter.
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Request URL: DELETE /users/1
+ * //
+ * // Success response:
+ * // {
+ * //   "message": "User deleted successfully"
+ * // }
+ */
 export const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
     const userId = parseInt(req.params.id);
     if (isNaN(userId)) return next(ApiError.badRequest("Invalid user ID"));
@@ -40,6 +110,34 @@ export const deleteUserById = async (req: Request, res: Response, next: NextFunc
     }
 }
 
+/**
+ * Creates a new user with validated input and hashed password.
+ *
+ * @param {Request} req - Express request object. Expects user data in `req.body` (email, password, role_id, etc.).
+ * @param {Response} res - Express response object.
+ * @param {NextFunction} next - Express next middleware function.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * // Request body:
+ * // {
+ * //   "email": "newuser@example.com",
+ * //   "password": "securepassword123",
+ * //   "role_id": 2,
+ * //   "first_name": "John",
+ * //   "last_name": "Doe"
+ * // }
+ * //
+ * // Success response:
+ * // {
+ * //   "id": 3,
+ * //   "email": "newuser@example.com",
+ * //   "role_id": 2,
+ * //   "first_name": "John",
+ * //   "last_name": "Doe",
+ * //   "created_at": "2024-01-01T00:00:00.000Z"
+ * // }
+ */
 export const insertUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const parsed = insertUserSchema.safeParse(req.body);

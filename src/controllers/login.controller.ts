@@ -11,21 +11,21 @@ import { ApiError } from "../middlewares/global/api.error";
  * @returns {Promise<void>}
  *
  * @example
-//  * // Request body:
-//  * // {
-//  * //   "email": "user@example.com",
-//  * //   "password": "userpassword"
-//  * // }
-//  *
-//  * // Success response:
-//  * // {
-//  * //   "message": "Login successful",
-//  * //   "user": {
-//  * //     "email": "user@example.com",
-//  * //     "role_id": 1
-//  * //   }
-//  * // }
-//  */
+ * // Request body:
+ * // {
+ * //   "email": "user@example.com",
+ * //   "password": "userpassword"
+ * // }
+ *
+ * // Success response:
+ * // {
+ * //   "message": "Login successful",
+ * //   "user": {
+ * //     "email": "user@example.com",
+ * //     "role_id": 1
+ * //   }
+ * // }
+ */
 export const loginUser = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
     const { email, password } = req.body;
     

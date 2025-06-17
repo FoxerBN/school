@@ -34,6 +34,7 @@ import studentRouter from './routes/student.route';
 import authRouter from './routes/auth.route';
 import { authMiddleware } from './middlewares/auth.middleware';
 app.use('/api/', authRouter);
+
 app.use(authMiddleware);
 app.use('/api/students', studentRouter);
 app.use('/api/users', userRouter);
