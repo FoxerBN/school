@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import path from "path";
 dotenv.config();
 
 import { validateBody } from './middlewares/global/validate.body';
@@ -12,7 +13,7 @@ import { errorHandler } from './middlewares/global/error.handler';
 import { MessageResponse } from './interfaces/MessageResponse';
 import "./config/postgres.db"; 
 const app = express();
-
+app.use(express.static("public"));
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
@@ -20,12 +21,10 @@ app.use(cookieParser());
 
 app.use(express.json(), validateBody);
 
-// Basic route
-app.get<{}, MessageResponse>('/', (req, res) => {
-  res.json({
-    message: 'Hi there!',
-  });
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
 });
+
 
 // Importing routes
 import userRouter from './routes/user.route';

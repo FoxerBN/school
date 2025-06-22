@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>API Tester (Dark Tailwind Style)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(120deg, #1a202c 0%, #23272f 100%);
+      min-height: 100vh;
+      color: #f2f4f8;
+      letter-spacing: 0.01em;
+      transition: background 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    h1 {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(90deg, #23272f 80%, #1a202c 100%);
+      color: #fafcff;
+      margin: 0;
+      padding: 36px 0 24px 0;
+      text-align: center;
+      font-size: 2.4em;
+      font-weight: 800;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      box-shadow: 0 6px 16px #0007;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 10px #0008;
+      border-bottom: 1px solid #23272f;
+      user-select: none;
+      transition: box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .section {
+      background: #23272f;
+      margin: 36px auto;
+      padding: 30px 28px 24px 28px;
+      border-radius: 18px;
+      max-width: 700px;
+      box-shadow: 0 2px 24px #11141e66, 0 1.5px 5px #11141e99;
+      border: 1.5px solid #23272f;
+      transition: box-shadow 0.23s cubic-bezier(0.4,0,0.2,1), background 0.2s cubic-bezier(0.4,0,0.2,1);
+      will-change: box-shadow, background;
+      animation: popin 0.6s cubic-bezier(.22,.65,.3,1.1);
+    }
+    @keyframes popin {
+      0%   { opacity: 0; transform: translateY(32px) scale(0.97);}
+      65%  { opacity: 1; transform: translateY(-4px) scale(1.01);}
+      100% { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    .endpoint {
+      margin-bottom: 34px;
+      padding-bottom: 20px;
+      border-bottom: 1.1px solid #323746;
+      border-radius: 8px;
+      background: transparent;
+      transition: background 0.14s cubic-bezier(.4,0,.2,1);
+      animation: fadein 0.8s cubic-bezier(.2,.7,.3,1.1);
+    }
+    @keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .endpoint:last-child { border-bottom: none; }
+    .endpoint h2 {
+      margin-bottom: 7px;
+      font-size: 1.15em;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #e6e9f5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.75px;
+      padding-bottom: 2px;
+    }
+    .endpoint label {
+      font-weight: 600;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #95a2bc;
+      font-size: 1em;
+      margin-top: 8px;
+      margin-bottom: 2.5px;
+      display: inline-block;
+      letter-spacing: 0.02em;
+    }
+    .endpoint input, .endpoint select, .endpoint textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #2d3748;
+      background: #181a21;
+      font-size: 1.08em;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #e5e8fa;
+      /* Remove focus, shadow and extra color effects */
+      box-shadow: none;
+      transition: none;
+    }
+    .endpoint input:focus, .endpoint textarea:focus {
+      border: 1.5px solid #2d3748;
+      outline: none;
+      background: #181a21;
+      color: #e5e8fa;
+      box-shadow: none;
+      transition: none;
+    }
+    .endpoint button {
+      padding: 9px 28px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+      color: #f2f4fb;
+      font-weight: 600;
+      font-size: 1.08em;
+      font-family: 'Inter', Arial, sans-serif;
+      letter-spacing: 0.7px;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 2px 16px #3b82f622;
+      transition: background .21s cubic-bezier(.4,0,.2,1), box-shadow .19s cubic-bezier(.4,0,.2,1), transform .09s cubic-bezier(.4,0,.2,1);
+      will-change: background, box-shadow, transform;
+    }
+    .endpoint button:hover, .endpoint button:focus {
+      background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+      box-shadow: 0 4px 20px #06b6d450;
+      transform: translateY(-2px) scale(1.03);
+      color: #fff;
+    }
+    .response {
+      background: linear-gradient(90deg, #1d2231 90%, #23272f 100%);
+      padding: 13px 14px;
+      border-radius: 9px;
+      font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', monospace;
+      white-space: pre;
+      font-size: 1.03em;
+      margin-top: 10px;
+      color: #aee9ff;
+      border: 1px solid #323746;
+      box-shadow: 0 1px 5px #1a202c19;
+      min-height: 22px;
+      transition: background 0.17s;
+      word-break: break-all;
+      line-height: 1.5;
+      opacity: 0.97;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #3b82f6 #23272f;
+    }
+    .method {
+      font-size: 1em;
+      font-weight: 700;
+      margin-right: 9px;
+      padding: 4px 15px 4px 11px;
+      border-radius: 999px;
+      background: #181a21;
+      letter-spacing: 1px;
+      box-shadow: 0 1px 4px #23272f18;
+      border: 1.5px solid #2d3748;
+      transition: background 0.17s, color 0.15s;
+      position: relative;
+    }
+    .GET { color: #38bdf8; border-left: 4px solid #38bdf8; }
+    .POST { color: #10b981; border-left: 4px solid #10b981; }
+    .PUT { color: #fbbf24; border-left: 4px solid #fbbf24; }
+    .DELETE { color: #f43f5e; border-left: 4px solid #f43f5e; }
+    code {
+      background: #181a21;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.98em;
+      font-family: 'JetBrains Mono', 'Menlo', 'Consolas', monospace;
+      font-weight: 500;
+    }
+    @media (max-width: 800px) {
+      .section { padding: 14px 2vw; max-width: 98vw; }
+      h1 { font-size: 1.3em; }
+    }
+    .endpoint:focus-within, .endpoint:active {
+      background: transparent;
+      box-shadow: none;
+      transition: none;
+    }
+    .endpoint input, .endpoint textarea {
+      caret-color: #38bdf8;
+    }
+    ::-webkit-scrollbar {
+      height: 7px;
+      width: 8px;
+      background: #23272f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 6px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #06b6d4;
+    }
+  </style>
+</head>
+<body>
+<h1>
+  <span style="color:#38bdf8;">API</span> Tester
+  <span style="font-size:0.53em;font-weight:400;color:#93b9e6;margin-left:8px;">Swagger-like UI</span>
+</h1>
+
+<div class="section">
+  <div class="endpoint" id="login">
+    <h2>
+      <span class="method POST">POST</span>
+      <code>/api/login</code>
+    </h2>
+    <label>Email</label>
+    <input type="email" id="login-email" placeholder="user@example.com">
+    <label>Password</label>
+    <input type="password" id="login-password" placeholder="password">
+    <button onclick="loginUser()">Try it!</button>
+    <div id="login-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="logout">
+    <h2>
+      <span class="method POST">POST</span>
+      <code>/api/logout</code>
+    </h2>
+    <button onclick="logoutUser()">Try it!</button>
+    <div id="logout-response" class="response"></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="endpoint" id="get-students">
+    <h2>
+      <span class="method GET">GET</span>
+      <code>/api/students</code>
+    </h2>
+    <button onclick="getAllStudents()">Try it!</button>
+    <div id="get-students-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="get-student-by-id">
+    <h2>
+      <span class="method GET">GET</span>
+      <code>/api/students/:id</code>
+    </h2>
+    <input type="number" id="get-student-id" placeholder="Student ID">
+    <button onclick="getStudentById()">Try it!</button>
+    <div id="get-student-by-id-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="create-student">
+    <h2>
+      <span class="method POST">POST</span>
+      <code>/api/students</code>
+    </h2>
+    <label>First Name</label>
+    <input type="text" id="student-first-name" placeholder="Alice">
+    <label>Last Name</label>
+    <input type="text" id="student-last-name" placeholder="Johnson">
+    <label>Grade</label>
+    <input type="text" id="student-grade" placeholder="4C">
+    <label>Birth Date</label>
+    <input type="date" id="student-birth-date">
+    <button onclick="createStudent()">Try it!</button>
+    <div id="create-student-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="update-student">
+    <h2>
+      <span class="method PUT">PUT</span>
+      <code>/api/students/:id</code>
+    </h2>
+    <input type="number" id="update-student-id" placeholder="Student ID">
+    <label>First Name</label>
+    <input type="text" id="update-student-first-name" placeholder="John">
+    <label>Last Name</label>
+    <input type="text" id="update-student-last-name" placeholder="Smith">
+    <label>Grade</label>
+    <input type="text" id="update-student-grade" placeholder="8C">
+    <label>Birth Date</label>
+    <input type="date" id="update-student-birth-date">
+    <button onclick="updateStudent()">Try it!</button>
+    <div id="update-student-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="delete-student">
+    <h2>
+      <span class="method DELETE">DELETE</span>
+      <code>/api/students/:id</code>
+    </h2>
+    <input type="number" id="delete-student-id" placeholder="Student ID">
+    <button onclick="deleteStudent()">Try it!</button>
+    <div id="delete-student-response" class="response"></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="endpoint" id="get-users">
+    <h2>
+      <span class="method GET">GET</span>
+      <code>/api/users</code>
+    </h2>
+    <button onclick="getAllUsers()">Try it!</button>
+    <div id="get-users-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="get-user-by-id">
+    <h2>
+      <span class="method GET">GET</span>
+      <code>/api/users/:id</code>
+    </h2>
+    <input type="number" id="get-user-id" placeholder="User ID">
+    <button onclick="getUserById()">Try it!</button>
+    <div id="get-user-by-id-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="create-user">
+    <h2>
+      <span class="method POST">POST</span>
+      <code>/api/users</code>
+    </h2>
+    <label>Email</label>
+    <input type="email" id="user-email" placeholder="newuser@example.com">
+    <label>Password</label>
+    <input type="password" id="user-password" placeholder="securepassword123">
+    <label>First Name</label>
+    <input type="text" id="user-first-name" placeholder="John">
+    <label>Last Name</label>
+    <input type="text" id="user-last-name" placeholder="Doe">
+    <label>Role ID</label>
+    <input type="number" id="user-role-id" placeholder="2 (Teacher)">
+    <button onclick="createUser()">Try it!</button>
+    <div id="create-user-response" class="response"></div>
+  </div>
+
+  <div class="endpoint" id="delete-user">
+    <h2>
+      <span class="method DELETE">DELETE</span>
+      <code>/api/users/:id</code>
+    </h2>
+    <input type="number" id="delete-user-id" placeholder="User ID">
+    <button onclick="deleteUser()">Try it!</button>
+    <div id="delete-user-response" class="response"></div>
+  </div>
+</div>
+
+<script>
+  function getApiUrl(path) {
+    return path.startsWith("/") ? path : "/" + path;
+  }
+
+  function showResponse(id, data, status) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (typeof data === "object") {
+      el.textContent = JSON.stringify(data, null, 2) + (status ? `\n[HTTP ${status}]` : "");
+    } else {
+      el.textContent = data;
+    }
+    el.style.opacity = 0.3;
+    el.animate([
+      { opacity: 0.3 },
+      { opacity: 1 }
+    ], {
+      duration: 400,
+      easing: 'cubic-bezier(.4,0,.2,1)'
+    });
+    el.style.opacity = 1;
+  }
+
+  async function loginUser() {
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
+    showResponse("login-response", "Loading...");
+    try {
+      const res = await fetch(getApiUrl("api/login"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      showResponse("login-response", data, res.status);
+    } catch (err) {
+      showResponse("login-response", "Network error");
+    }
+  }
+
+  async function logoutUser() {
+    showResponse("logout-response", "Loading...");
+    try {
+      const res = await fetch(getApiUrl("api/logout"), {
+        method: "POST",
+        credentials: "include"
+      });
+      const data = await res.json();
+      showResponse("logout-response", data, res.status);
+    } catch (err) {
+      showResponse("logout-response", "Network error");
+    }
+  }
+
+  async function getAllStudents() {
+    showResponse("get-students-response", "Loading...");
+    try {
+      const res = await fetch(getApiUrl("api/students"), {
+        credentials: "include"
+      });
+      const data = await res.json();
+      showResponse("get-students-response", data, res.status);
+    } catch {
+      showResponse("get-students-response", "Network error");
+    }
+  }
+
+  async function getStudentById() {
+    const id = document.getElementById("get-student-id").value;
+    showResponse("get-student-by-id-response", "Loading...");
+    if (!id) return showResponse("get-student-by-id-response", "Please enter a student ID");
+    try {
+      const res = await fetch(getApiUrl(`api/students/${id}`), {
+        credentials: "include"
+      });
+      const data = await res.json();
+      showResponse("get-student-by-id-response", data, res.status);
+    } catch {
+      showResponse("get-student-by-id-response", "Network error");
+    }
+  }
+
+  async function createStudent() {
+    const first_name = document.getElementById("student-first-name").value;
+    const last_name = document.getElementById("student-last-name").value;
+    const grade = document.getElementById("student-grade").value;
+    const birth_date = document.getElementById("student-birth-date").value;
+    showResponse("create-student-response", "Loading...");
+    try {
+      const res = await fetch(getApiUrl("api/students"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ first_name, last_name, grade, birth_date })
+      });
+      const data = await res.json();
+      showResponse("create-student-response", data, res.status);
+    } catch {
+      showResponse("create-student-response", "Network error");
+    }
+  }
+
+  async function updateStudent() {
+    const id = document.getElementById("update-student-id").value;
+    const first_name = document.getElementById("update-student-first-name").value;
+    const last_name = document.getElementById("update-student-last-name").value;
+    const grade = document.getElementById("update-student-grade").value;
+    const birth_date = document.getElementById("update-student-birth-date").value;
+    showResponse("update-student-response", "Loading...");
+    if (!id) return showResponse("update-student-response", "Please enter a student ID");
+    try {
+      const body = {};
+      if (first_name) body.first_name = first_name;
+      if (last_name) body.last_name = last_name;
+      if (grade) body.grade = grade;
+      if (birth_date) body.birth_date = birth_date;
+      const res = await fetch(getApiUrl(`api/students/${id}`), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      showResponse("update-student-response", data, res.status);
+    } catch {
+      showResponse("update-student-response", "Network error");
+    }
+  }
+
+  async function deleteStudent() {
+    const id = document.getElementById("delete-student-id").value;
+    showResponse("delete-student-response", "Loading...");
+    if (!id) return showResponse("delete-student-response", "Please enter a student ID");
+    try {
+      const res = await fetch(getApiUrl(`api/students/${id}`), {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      showResponse("delete-student-response", data, res.status);
+    } catch {
+      showResponse("delete-student-response", "Network error");
+    }
+  }
+
+  async function getAllUsers() {
+    showResponse("get-users-response", "Loading...");
+    try {
+      const res = await fetch(getApiUrl("api/users"), {
+        credentials: "include"
+      });
+      const data = await res.json();
+      showResponse("get-users-response", data, res.status);
+    } catch {
+      showResponse("get-users-response", "Network error");
+    }
+  }
+
+  async function getUserById() {
+    const id = document.getElementById("get-user-id").value;
+    showResponse("get-user-by-id-response", "Loading...");
+    if (!id) return showResponse("get-user-by-id-response", "Please enter a user ID");
+    try {
+      const res = await fetch(getApiUrl(`api/users/${id}`), {
+        credentials: "include"
+      });
+      const data = await res.json();
+      showResponse("get-user-by-id-response", data, res.status);
+    } catch {
+      showResponse("get-user-by-id-response", "Network error");
+    }
+  }
+
+  async function createUser() {
+    const email = document.getElementById("user-email").value;
+    const password = document.getElementById("user-password").value;
+    const first_name = document.getElementById("user-first-name").value;
+    const last_name = document.getElementById("user-last-name").value;
+    const role_id = document.getElementById("user-role-id").value;
+    showResponse("create-user-response", "Loading...");
+    try {
+      const res = await fetch(getApiUrl("api/users"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password, first_name, last_name, role_id })
+      });
+      const data = await res.json();
+      showResponse("create-user-response", data, res.status);
+    } catch {
+      showResponse("create-user-response", "Network error");
+    }
+  }
+
+  async function deleteUser() {
+    const id = document.getElementById("delete-user-id").value;
+    showResponse("delete-user-response", "Loading...");
+    if (!id) return showResponse("delete-user-response", "Please enter a user ID");
+    try {
+      const res = await fetch(getApiUrl(`api/users/${id}`), {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      showResponse("delete-user-response", data, res.status);
+    } catch {
+      showResponse("delete-user-response", "Network error");
+    }
+  }
+</script>
+</body>
+</html>
