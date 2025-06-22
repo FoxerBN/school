@@ -115,6 +115,17 @@ describe("Simple Login and User Tests", () => {
     });
   });
 
+  describe("Logout Test", () => {
+    it("should logout successfully", async () => {
+      const res = await request(app)
+        .post("/api/logout")
+        .set("Cookie", adminCookie);
+
+      expect(res.status).toBe(200);
+      expect(res.body.message).toBe("Logout successful");
+    });
+  });
+
   afterAll(async () => {
     await sql.end();
   });

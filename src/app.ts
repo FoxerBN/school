@@ -18,7 +18,6 @@ app.use(helmet());
 app.use(cors());
 app.use(cookieParser());
 
-// Our custom body validation middleware
 app.use(express.json(), validateBody);
 
 // Basic route
@@ -38,7 +37,6 @@ app.use('/api/', authRouter);
 app.use(authMiddleware);
 app.use('/api/students', studentRouter);
 app.use('/api/users', userRouter);
-
 
 // Global Middlewares
 app.use(notFound);
