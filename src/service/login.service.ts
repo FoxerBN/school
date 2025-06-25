@@ -10,7 +10,6 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
 
 export const verifyPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
     const result = await bcrypt.compare(password, hashedPassword);
-    console.log("Comparison result:", result);
     return result;
 }
 

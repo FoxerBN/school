@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>API Tester (Dark Tailwind Style)</title>
+  <title>API Tester</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <style>
     html, body {
@@ -89,7 +89,7 @@
       letter-spacing: 0.02em;
     }
     .endpoint input, .endpoint select, .endpoint textarea {
-      width: 100%;
+      width: 80%;
       margin-bottom: 10px;
       padding: 10px 14px;
       border-radius: 8px;
@@ -207,7 +207,7 @@
 <body>
 <h1>
   <span style="color:#38bdf8;">API</span> Tester
-  <span style="font-size:0.53em;font-weight:400;color:#93b9e6;margin-left:8px;">Swagger-like UI</span>
+  <span style="font-size:0.53em;font-weight:400;color:#93b9e6;margin-left:8px;">test CRUD operations</span>
 </h1>
 
 <div class="section">
@@ -217,9 +217,14 @@
       <code>/api/login</code>
     </h2>
     <label>Email</label>
-    <input type="email" id="login-email" placeholder="user@example.com">
+    <select name="email" id="login-email">
+  <option value="admin@skola.sk">admin@skola.sk</option>
+  <option value="teacher1@skola.sk">teacher1@skola.sk</option>
+  <option value="teacher2@skola.sk">teacher2@skola.sk</option>
+  <option value="director@skola.sk">director@skola.sk</option>
+</select><br
     <label>Password</label>
-    <input type="password" id="login-password" placeholder="password">
+    <input type="password" id="login-password" placeholder="password123">
     <button onclick="loginUser()">Try it!</button>
     <div id="login-response" class="response"></div>
   </div>
