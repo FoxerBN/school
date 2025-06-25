@@ -1,6 +1,3 @@
-Tu máš stručný, ale profesionálny `README.md` pre tvoj projekt na GitHub, napísaný v angličtine:
-
----
 
 # 🏫 School Management API
 
