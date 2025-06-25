@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import { rateLimiter } from './middlewares/rate.limiter';
 import path from "path";
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
 app.use(cookieParser());
+app.use(rateLimiter);
 
 app.use(express.json(), validateBody);
 
