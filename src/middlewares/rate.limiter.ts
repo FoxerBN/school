@@ -10,7 +10,7 @@ const maxRequests = 100;
 const ipStore = new Map<string, RateRecord>();
 
 export function rateLimiter(req: Request, res: Response, next: NextFunction) {
-  const ip = req.ip;
+  const ip = req.ip || '';
   const now = Date.now();
   const record = ipStore.get(ip);
   if (!record || now - record.firstRequestTime > rateLimitWindowMs) {
